@@ -5,6 +5,7 @@ import movie.payload.request.OrderRequest;
 import movie.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,5 +27,13 @@ public class OrderController {
 
         List<Object[]> salesStatistics = orderService.calculateSalesStatisticsByCinemaAndTimeRange(startTime, endTime);
         return ResponseEntity.ok(salesStatistics);
+    }
+    @PostMapping("add")
+    public ResponseEntity<?> addBill(@RequestBody OrderRequest request) {
+        orderService.addBill(request);
+        BaseResponse response = new BaseResponse();
+        response.setStatusCode(200);
+        response.setMessage("Thêm bill thành công");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

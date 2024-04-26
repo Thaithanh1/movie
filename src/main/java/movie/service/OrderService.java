@@ -26,10 +26,30 @@ public class OrderService {
     private BillFoodRepository billFoodRepository;
     @Autowired
     private BillTicketRepository billTicketRepository;
-    @Autowired
-    private FoodRepository foodRepository;
 
     public List<Object[]> calculateSalesStatisticsByCinemaAndTimeRange(LocalDateTime startTime, LocalDateTime endTime) {
         return billRepository.calculateSalesStatisticsByCinemaAndTimeRange(startTime, endTime);
+    }
+
+    public void addBill(Bill bill) {
+        double allPriceFood = 0;
+        double allPriceTicket = 0;
+        billRepository.save(bill);
+        for (BillTicket billTicket : bill.getBillTickets()) {
+            billTicket.setBill(bill);
+            billTicketRepository.save(billTicket);
+            allPriceTicket += billTicket.getTicket().getPriceTicket() * billTicket.getQuantity();
+        }
+
+        for (BillFood billFood : bill.getBillFoods()) {
+            billFood.setBill(bill);
+            billFoodRepository.save(billFood);
+            allPriceFood += billFood.getFood().getPrice() * billFood.getQuantity();
+        }
+
+        double totalMoney = ((allPriceTicket + allPriceFood) * (100 - bill.getPromotion().getPercent())) / 100;
+        bill.setTotalMoney(totalMoney);
+        bill.setCreateTime(new Date());
+        billRepository.save(bill);
     }
 }
