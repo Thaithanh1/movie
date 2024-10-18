@@ -7,3 +7,4 @@ Chức năng:
 - Thêm, sửa, xóa Seat(Admin)
 - Thêm, sửa, xóa Food(Admin)
 - Thêm, sửa, xóa Movie
+<img width="689" alt="image" src="https://github.com/user-attachments/assets/f47cc3c7-4e39-4839-bc28-d747f8c145e9">
